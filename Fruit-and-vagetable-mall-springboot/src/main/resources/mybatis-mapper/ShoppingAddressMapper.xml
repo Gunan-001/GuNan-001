@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.small.fruitandvagetablemallspringboot.dao.ShoppingAddressMapper">
+    <select id="queryForShoppingAddressById" parameterType="int" resultType="hashMap">
+        SELECT
+            sa.*,pi.nickName,
+            pi.userName,
+            pi.userPhone,
+            pi.userSex,
+            pi.userStatus
+        FROM
+            shopping_address sa
+                LEFT JOIN personal_information pi ON sa.userId = pi.id
+        where pi.id =#{uid} order by sa.shoppingDefault desc;
+    </select>
+
+    <select id="queryForShoppingAddressAndPersonInfo" resultType="hashMap">
+        SELECT
+            sa.*,pi.nickName,
+            pi.userName,
+            pi.userPhone,
+            pi.userSex,
+            pi.userStatus
+        FROM
+            shopping_address sa
+                LEFT JOIN personal_information pi ON sa.userId = pi.id order by sa.shoppingDefault desc
+    </select>
+
+    <insert id="addShoppingAddress" parameterType="shoppingAddress">
+        insert into shopping_address (userId,shoppingName,shoppingPhone,shoppingAddress,shoppingDefault)
+        VALUES (#{userId}, #{shoppingName}, #{shoppingPhone}, #{shoppingAddress}, 0)
+    </insert>
+
+    <update id="updateShoppingAddressById" parameterType="shoppingAddress">
+        update shopping_address
+        <set>
+            <if test="''!=userId and null!=userId">
+                userId=#{userId},
+            </if>
+            <if test="''!=shoppingName and null!=shoppingName">
+                shoppingName=#{shoppingName},
+            </if>
+            <if test="''!=shoppingPhone and null!=shoppingPhone">
+                shoppingPhone=#{shoppingPhone},
+            </if>
+            <if test="''!=shoppingAddress and null!=shoppingAddress">
+                shoppingAddress=#{shoppingAddress},
+            </if>
+            <if test="null!=shoppingDefault">
+                shoppingDefault=#{shoppingDefault},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="updateShoppingAddressByUserId">
+        update shopping_address
+        <set>
+                shoppingDefault=0
+        </set>
+        where userId=#{uid};
+    </select>
+
+    <delete id="deleteShoppingAddressById" parameterType="int">
+        delete
+        from shopping_address
+        where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.small.fruitandvagetablemallspringboot.dao.SlideShowMapper">
+    <select id="queryForSlideshowAndCommodityInfoById" parameterType="int" resultType="slideshow">
+        SELECT *
+        FROM slideshow
+        where id = #{id}
+    </select>
+
+    <select id="queryForSlideshowAndCommodityInfo" resultType="slideshow">
+        SELECT *
+        FROM slideshow
+    </select>
+
+    <insert id="addSlideshow" parameterType="slideshow">
+        insert into slideshow(path, name, status)
+        VALUES (#{path}, #{name}, 0)
+    </insert>
+
+    <update id="updateSlideshowById" parameterType="slideshow">
+        update slideshow
+        <set>
+            <if test="''!=path and null!=path">
+                path=#{path},
+            </if>
+            <if test="''!=name and null!=name">
+                name=#{name},
+            </if>
+            <if test="''!=status and null!=status">
+                status=#{status},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteSlideshowById" parameterType="int">
+        delete
+        from slideshow
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteSlideshowBatchById" parameterType="Integer[]">
+        delete
+        from slideshow where id in
+        <foreach collection="slideIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

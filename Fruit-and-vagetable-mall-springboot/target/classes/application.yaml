@@ -1,0 +1,63 @@
+server:
+  port: 8000 #端口号
+#  servlet:
+#    context-path: /small  #上下文
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/fruit_and_vegetable_shopping_mall?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+    freemarker:
+      cache: false    #页面不加载缓存，修改即时生效
+
+    static-path-pattern: /static/**  #放开springboot对静态资源的拦截（判断路径符合这个规则的，为静态资源）
+  web:
+    resources:
+      static-locations: classpath:/static/**
+
+mybatis:
+  type-aliases-package: com.small.fruitandvagetablemallspringboot.pojo #别名
+  configuration:
+    map-underscore-to-camel-case: true #java驼峰命名与数据库中字段名对应
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志
+  mapper-locations: classpath:mybatis-mapper/*.xml #mybatis映射文件
+
+ty:
+  alipay:
+    appId: 2021000148696527
+    appPrivateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCVd4lNq+SaRDVmdxJRY0YtusbKa84AOoacKPjJVtO1uLrf8pIPFDXbQ1fbz53uxKBmobRX0taSnvRZEvGh9FEEaFLj5dCIAhQvPAp7ReYUPw5wTl08lvxmvqKxfbYAA3IpqGg+7pd+6sQR4irUVb2YTwgX1UxXZaJDlJzWTjG+AiI03VTBg9Lx2JDhzJiRzZ7pu8Ou97E3v7Lk33AR+6OVV2/oPkUuUQABuJSHAffEm4U0pTJDpqaJoZVKjxXiCLVWezfnfDeFYBYJdUHuCgohXkTcw4KDWWgRXKdmAX3VQawVRu+WP8kIMZP0jMwQaCBE+N4jZ5e+Hz/k332rIp+fAgMBAAECggEACiv0YCDOkeEKcUqxKHDFGd+YH7Zucn2JI592Lt2F0twbe5oaboRFlgJjPEZIzTL8Z3+hskha6ed/YYB0iT0DNnWTDodZRag+j2hankEHg2E3LlVm6vSrgKKAl+uiMyYI4uTfE0lRbgW0CjOGDqU3HeJi/pw5ccks3cSDV+JCaFfKNFYt5TCCfuyFKUsLD260k/UGmaOrkVYqtzx/hjTuolUFF5HlLWAY+UW0uF7A8VN5oij8QiFWwvFgMh5+0IAr0V59Htm6JfvKgJumM9CrFldQRtgeR43UaFSFl3wnLAZc8ozt94amL3foIb/8oEXzp7YKbFJsT1lNqYIc3wLkQQKBgQDD251sZ+xdK2Ii5VXxxcWA4pZavqJouMmW3rkKmaTcLXOaQpVsStiVKkJbYqY5WKzE1JfhTtZQziE3rQBesNyWp5z2a+ljsoGA/PM1UfX0acBPzaMjpOeOlie1VNfqUiK0vec2L+1V1vtZR8snt+Dt38OuISQB4eoyIO5xcGmd5wKBgQDDXSF5CC0sy8zAxDNcCTuL2g2dXQgRy1FBmOg/M6nYNWYMfJ6zvF2mOn5f0xyHiyI9pBeCXsuxGHrnocPtqf+PU5YFBaCLvz4RAg17iRY21gP6N0h8RqzbpzxpdO/LhgSBvEniAxne+yL3Ttg8Ut6tXRMVswEyHRcl8PSVsXAJiQKBgHpIphNHF2ZcbdtHwM9BIb0Eu8dQeupTZVnTGUkrAKmPnzvTEqQYXv1S8zdHcm0flk8WRPWhWWH+MPMoCrEUT8WoRPH+EivzCbRVOiwyThQZ6r5or9DTZte5nHU00dI1EgIzBybn6ZDMtwXZM1hLEB60tOIFQwwB100RDo65FthFAoGBAIiqX74hYCjUMNow5pTdyJAe7CNHb1uzVZaD9wQvigM757WYgBTQEts0VC+IqY6QYFWqst96nRe4PlJHsZ5Sq/qByJKeyx63nB2dx/zBe47EzGd/wO9fKZFHPlWvfghsKj7vjufSr4hzOpSyzUX12tyAHdeyL4X1H7plA1SsmemxAoGAdLOpismnLNi+NcXMcVKawJZY9vuqAcbPNf4hgOiF9gwUTqKdYRvHCnF2SddQMz8GqXImMPvUa0ajya9yeMXc++OcVqwYM9vgKSYMdre5tu3VZfz+06r9z55U2DF0miz31Fh5a3FMKBSDZPWrzYzIfTHI7SzJuRWvYDRJ4Ykw7D8=
+    alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApEd10YWxU3WSAv47o2hi7gpYdxm5drfGcldbYQbEgJBihsWhYyX8jgOS+RGrlV5SjCOU1d8f4Rs+KsBSPQSwTYkB79ll+3KTSadXuUS0hvNm4+Bhkiq8Mit0CWX61XXPzDF62uhK7W/axkqkh/eBNYC9UbchCyZY1gU8MEPsYrXwHGoZGdWXXqtvycIi7IaHNW8XI/+IaSbCK7+2wP9lts7QXwp+IM0oN6RjGBKLAWZCeIMYDG3RPFvNubi2TH9Xl7dvnXYvn+16A1bhn67A/cmMKeQXcYp5PnIskamgGcymziZi4ZPSlY0ZHfME9+bQZKY9AcqYDM2jH7APwRZGqwIDAQAB
+    #这个配置的是阿里云通知你的项目的ip地址路径
+    notifyUrl:  http://m279eced.natappfree.cc/orderDetail/notify
+
+
+
+# application.yml
+#logging:
+#  level:
+#    io.swagger.models.parameters.AbstractSerializableParameter: error
