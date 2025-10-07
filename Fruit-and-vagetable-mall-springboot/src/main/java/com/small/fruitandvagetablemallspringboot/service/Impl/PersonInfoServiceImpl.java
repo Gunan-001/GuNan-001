@@ -77,6 +77,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
             return Result.error(ResultCodeEnum.PARAM_ERROR);
         }
 
+        personInfo.getUserName();
         // 密码加密处理
         personInfo.setUserPassword(MD5Utils.md5(personInfo.getUserPassword().trim()));
 
@@ -90,7 +91,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         return Result.ok();
     }
     /**
-     * 修改查个人信息
+     * 禁用或解除禁用用户
      *
      * @return
      */
@@ -109,6 +110,45 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         if (integer < 1) {
             return Result.error(ResultCodeEnum.FAIL);
         }
+        return Result.ok();
+    }
+
+/**
+ * 根据ID更新用户密码
+ * @param personalInformation 包含用户ID和新密码的个人信息对象
+ * @return 返回操作结果，成功返回ok，失败返回错误信息
+ */
+    @Override
+    public Result updatePasswordById(PersonalInformation personalInformation) {
+    // 检查ID是否为空，如果为空则返回参数错误
+        if (null == personalInformation.getId()) {
+            return Result.error(ResultCodeEnum.PARAM_ERROR);
+        }
+    // 调用Mapper更新密码，获取受影响的行数
+        personalInformation.setUserPassword(MD5Utils.md5(personalInformation.getUserPassword()));
+        Integer integer = personInfoMapper.updatePasswordById(personalInformation);
+    // 如果受影响行数小于1，说明更新失败，返回失败结果
+        if (integer < 1) {
+            return Result.error(ResultCodeEnum.FAIL);
+        }
+    // 更新成功，返回成功结果
+        return Result.ok();
+    }
+
+
+    @Override
+    public Result updatePasswordByPhoneAndName(PersonalInformation personalInformation) {
+        if (null == personalInformation.getUserName()&&null == personalInformation.getUserPhone()&&null == personalInformation.getUserPassword()) {
+            return Result.error(ResultCodeEnum.PARAM_ERROR);
+        }
+        // 调用Mapper更新密码，获取受影响的行数
+        personalInformation.setUserPassword(MD5Utils.md5(personalInformation.getUserPassword()));
+        Integer integer = personInfoMapper.updatePasswordByPhoneAndName(personalInformation);
+        // 如果受影响行数小于1，说明更新失败，返回失败结果
+        if (integer < 1) {
+            return Result.error(ResultCodeEnum.FAIL);
+        }
+        // 更新成功，返回成功结果
         return Result.ok();
     }
 
@@ -145,12 +185,19 @@ public class PersonInfoServiceImpl implements PersonInfoService {
             //账户或密码错误,登录失败
             return Result.error(ResultCodeEnum.LOGIN_ERROR);
         }
+        if ( personInfo.getUserStatus()!=0) {
+            //此用户已被禁用
+            return Result.error(ResultCodeEnum.LOGIN_ERRORTWO);
+        }
         //创建token
         String token = jwtService.createToken(person.getUserName());
         Map<String,Object> resultMap  = new HashMap<String,Object>();
         resultMap.put("userName",personInfo.getUserName());
         resultMap.put("userId",personInfo.getId());
         resultMap.put("nickName",personInfo.getNickName());
+        resultMap.put("userSex",personInfo.getUserSex());
+        resultMap.put("userPhone",personInfo.getUserPhone());
+        resultMap.put("userStatus",personInfo.getUserStatus());
         resultMap.put("token",token);
         return Result.ok().data(resultMap);
     }

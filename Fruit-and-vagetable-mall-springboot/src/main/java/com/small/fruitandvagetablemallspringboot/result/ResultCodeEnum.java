@@ -9,8 +9,8 @@ public enum ResultCodeEnum {
     FAIL(404, "操作失败"),
     PERMISSION(403, "没有权限"),
     PARAM_ERROR( 400, "参数不正确"),
-    LOGIN_ERROR( 404, "账户名或密码错误");
-
+    LOGIN_ERROR( 404, "账户名或密码错误"),
+    LOGIN_ERRORTWO( 999, "此用户已被禁用，请联系管理员处理");
     private Integer code;
     private String message;
 

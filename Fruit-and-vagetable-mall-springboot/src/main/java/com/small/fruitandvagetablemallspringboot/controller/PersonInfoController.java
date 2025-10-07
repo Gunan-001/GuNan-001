@@ -61,7 +61,7 @@ public class PersonInfoController {
     }
 
     /**
-     * 修改对应用户信息
+     * 禁用或解除禁用用户
      *
      * @param personInfos
      * @return
@@ -73,6 +73,30 @@ public class PersonInfoController {
         return service.updatePersonalInfoById(personInfos);
     }
 
+    /**
+     * 修改密码
+     *
+     * @param personInfos
+     * @return
+     */
+    //@ApiOperation("修改用户密码")
+    @PutMapping("/update-userPassword")
+    // @ApiImplicitParam(value = "用户信息实体", name = "PersonalInformation", paramType = "body", required = true, dataType = "personInfo")
+    public Result updatePasswordById(@RequestBody(required = false) PersonalInformation personInfos) {
+        return service.updatePasswordById(personInfos);
+    }
+    /**
+     * 修改密码
+     *
+     * @param personInfos
+     * @return
+     */
+    //@ApiOperation("修改用户密码")
+    @PutMapping("/update-userPassword-NameAndPhone")
+    // @ApiImplicitParam(value = "用户信息实体", name = "PersonalInformation", paramType = "body", required = true, dataType = "personInfo")
+    public Result updatePasswordByPhoneAndName(@RequestBody(required = false) PersonalInformation personInfos) {
+        return service.updatePasswordByPhoneAndName(personInfos);
+    }
 
     /**
      * 删除对应用户信息

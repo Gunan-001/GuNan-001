@@ -41,11 +41,18 @@ public interface PersonalInformationMapper {
     Integer addPersonalInfo(PersonalInformation personalInformation);
 
     /**
-     * 更新用户信息
+     * 修改用户状态
      * @param
      * @return
      */
     Integer updatePersonalInfoById(PersonalInformation personalInformation);
+
+    /**
+     * 修改用户密码
+     * @param
+     * @return
+     */
+    Integer updatePasswordById(PersonalInformation personalInformation);
 
     /**
      * 删除用户信息
@@ -53,6 +60,7 @@ public interface PersonalInformationMapper {
      * @return
      */
     Integer deletePersonalInfoById(@Param("id") Integer id);
-    
 
+
+    Integer updatePasswordByPhoneAndName(PersonalInformation personalInformation);
 }

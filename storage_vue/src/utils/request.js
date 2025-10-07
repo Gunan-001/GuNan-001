@@ -184,6 +184,14 @@ const request = {
 	/* 批量处理用户 */
 	editUserInfo(params){
 		return axios.put('/personInfo/update-PersonalInfo-ById',params)
+	},
+	/* 管理员修改用户密码 */
+	updataPassword(params){
+		return axios.put('/personInfo/update-userPassword',params)
+	},
+	/* 用户修改用户密码 */
+	updataPasswordByNameAndPhone(params){
+		return axios.put('/personInfo/update-userPassword-NameAndPhone',params)
 	}
 }
 

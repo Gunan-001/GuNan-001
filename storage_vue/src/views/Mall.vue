@@ -8,6 +8,8 @@
                         <el-button type="text" @click="open('login')">登录</el-button>
                         <span class="sep"> | </span>
                         <el-button type="text" @click="open('register')">注册</el-button>
+                        <span class="sep"> | </span>
+                        <el-button type="text" @click="open('password')">忘记密码</el-button>
                     </li>
                     <li v-else>
                         <span style="color: #B0B0B0">欢迎,</span>
@@ -84,6 +86,57 @@
                     <el-button style="width: 100%" type="primary" @click="submit">确 定</el-button>
                   </span>
                 </el-dialog>
+
+                <!-- 忘记密码弹窗 -->
+<el-dialog
+  title="忘记密码"
+  :visible.sync="forgotVisible"
+  width="22%"
+  center
+  @closed="clearForgotForm">
+  <el-form ref="forgotForm" :model="forgotForm" :rules="forgotRules" status-icon>
+    <!-- 用户名输入 -->
+    <el-form-item prop="userName">
+      <el-input
+        prefix-icon="el-icon-user-solid"
+        type="text"
+        placeholder="请输入您的账号"
+        v-model="forgotForm.userName">
+      </el-input>
+    </el-form-item>
+    <!-- 手机号输入 -->
+    <el-form-item prop="userPhone">
+      <el-input
+        prefix-icon="el-icon-phone"
+        type="text"
+        placeholder="请输入注册时的手机号"
+        v-model="forgotForm.userPhone">
+      </el-input>
+    </el-form-item>
+    <!-- 新密码输入 -->
+    <el-form-item prop="newPassword">
+      <el-input
+        prefix-icon="el-icon-lock"
+        type="password"
+        placeholder="请输入新密码"
+        v-model="forgotForm.newPassword">
+      </el-input>
+    </el-form-item>
+    <!-- 确认新密码输入 -->
+    <el-form-item prop="confirmPassword">
+      <el-input
+        prefix-icon="el-icon-lock"
+        type="password"
+        placeholder="请再次输入新密码"
+        v-model="forgotForm.confirmPassword">
+      </el-input>
+    </el-form-item>
+  </el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="forgotVisible = false">取消</el-button>
+    <el-button type="primary" @click="submitForgotPassword">确定修改</el-button>
+  </span>
+</el-dialog>
             </div>
         </div>
         <!--  顶部导航栏-end  -->
@@ -161,7 +214,31 @@ export default {
                 callback();
             }
         };
+  // 忘记密码-新密码校验（支持确认密码联动）
+  const validateNewPass = (rule, value, callback) => {
+    if (value === '') {
+      callback(new Error('请输入新密码'));
+    } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,18}$/.test(value)) {
+      callback(new Error('密码长度为5-18位，且必须包含字母和数字'));
+    } else {
+      // 已输入确认密码时，触发确认密码校验
+      if (this.forgotForm.confirmPassword !== '') {
+        this.$refs.forgotForm && this.$refs.forgotForm.validateField('confirmPassword');
+      }
+      callback();
+    }
+  };
 
+  // 忘记密码-确认密码校验
+  const validateConfirmPass = (rule, value, callback) => {
+    if (value === '') {
+      callback(new Error('请再次输入新密码'));
+    } else if (value !== this.forgotForm.newPassword) {
+      callback(new Error('两次输入的密码不一致'));
+    } else {
+      callback();
+    }
+  };
         return {
             activeIndex: '',
             nickName:'',
@@ -175,6 +252,14 @@ export default {
                 userPhone:'',
                 userSex:''
             },
+            forgotVisible: false, // 忘记密码弹窗显示状态
+    // 忘记密码表单数据
+    forgotForm: {
+      userName: '',    // 用户名
+      userPhone: '',   // 手机号
+      newPassword: '', // 新密码
+      confirmPassword: '' // 确认新密码
+    },
             // 表单校验规则
             rules: {
                 userName: [
@@ -197,15 +282,32 @@ export default {
                 userSex: [
                     { required: true, message: '请选择性别', trigger: 'change' }
                 ]
-            }
+            },
+            
+            forgotRules: {
+      userName: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 5, max: 18, message: '长度在 5 到 18 个字符', trigger: 'blur' },
+        { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{5,18}$/, message: '支持中英文、数字和下划线', trigger: 'blur' }
+      ],
+      userPhone: [
+        { required: true, message: '请输入手机号码', trigger: 'blur' },
+        { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
+      ],
+      newPassword: [
+        { required: true, validator: validateNewPass, trigger: 'blur' }
+      ],
+      confirmPassword: [
+        { required: true, validator: validateConfirmPass, trigger: 'blur' }
+      ]
+    }
+
+
+
         }
     },
     methods: {
-        /* 弹出框打开 */
-        open(attr){
-            this.formTitle = attr === 'login' ? '登录' : '注册';
-            this.$store.state.loginDialogVisible = true;
-        },
+
         /* 清空弹出框 */
         clearForm(){
             // 使用 resetFields() 清空并重置校验状态
@@ -219,7 +321,6 @@ export default {
                 if (!isValid) {
                     return; // 校验不通过，终止提交
                 }
-
                 // 校验通过，继续执行登录或注册逻辑
                 if (this.formTitle === '登录') {
                     let param = {userName: this.form.userName, userPassword: this.form.userPassword};
@@ -247,6 +348,52 @@ export default {
                 }
             });
         },
+        open(attr) {
+        // 处理忘记密码
+        if (attr === 'password') {
+            this.forgotVisible = true;
+            this.$refs.forgotForm && this.$refs.forgotForm.resetFields();
+            return;
+        }
+        // 处理登录/注册
+        this.formTitle = attr === 'login' ? '登录' : '注册';
+        this.$store.state.loginDialogVisible = true;
+    },
+
+  /* 清空忘记密码表单 */
+  clearForgotForm() {
+    this.$refs.forgotForm && this.$refs.forgotForm.resetFields();
+    this.forgotVisible = false;
+  },
+
+  /* 提交忘记密码修改（调用指定接口） */
+  async submitForgotPassword() {
+    this.$refs.forgotForm.validate(async (isValid) => {
+      if (!isValid) return; // 表单校验不通过，终止
+
+      try {
+        // 构造接口参数（与后端接口字段匹配）
+        const params = {
+          userName: this.forgotForm.userName,
+          userPhone: this.forgotForm.userPhone,
+          userPassword: this.forgotForm.newPassword // 新密码字段（后端若用其他名需同步修改）
+        };
+
+        // 调用忘记密码接口（需确保 request 中已定义 updataPasswordByNameAndPhone 方法）
+        const res = await request.updataPasswordByNameAndPhone(params);
+        
+        if (res) {
+          this.$message.success(res.message || '密码修改成功！');
+          this.forgotVisible = false; // 关闭弹窗
+          setTimeout(() => {
+            this.open('login'); // 自动跳转登录
+          }, 1500);
+        }
+      } catch (error) {
+        this.$message.error(error.message || '密码修改失败，请重试');
+      }
+    });
+  },
         /* 保存信息至sessionstorage */
         saveInfo(userId,userName,nickName,token){
             sessionStorage.setItem('userId', userId);

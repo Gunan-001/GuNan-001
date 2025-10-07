@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.small.fruitandvagetablemallspringboot.dao.PersonalInformationMapper">
-    <select id="queryForPersonByUserNameAndPassword" resultType="personalInformation">
+    <select id="queryForPersonByUserNameAndPassword" resultType="com.small.fruitandvagetablemallspringboot.pojo.PersonalInformation">
         select * from personal_information where userName=#{userName} and userPassword =#{password}
     </select>
 
 
-    <select id="queryForPersonalInformationById" parameterType="int"  resultType="personalInformation">
+    <select id="queryForPersonalInformationById" parameterType="int"  resultType="com.small.fruitandvagetablemallspringboot.pojo.PersonalInformation">
         SELECT
             *
         FROM
             personal_information where id=#{id};
     </select>
 
-    <select id="queryForPersonalInformation"  resultType="personalInformation">
+    <select id="queryForPersonalInformation"  resultType="com.small.fruitandvagetablemallspringboot.pojo.PersonalInformation">
         SELECT
             *
         FROM
@@ -22,13 +22,20 @@
 
     <insert id="addPersonalInfo" parameterType="personalInformation">
         INSERT into personal_information(nickName,userSex,userName,userPassword,userPhone,userStatus) VALUES
-            (#{nickName},#{userSex},#{userName},#{userPassword},#{userPhone},1)
+            (#{nickName},#{userSex},#{userName},#{userPassword},#{userPhone},0)
     </insert>
 
     <update id="updatePersonalInfoById" parameterType="personalInformation">
         update personal_information set userStatus=#{userStatus} where id=#{id}
     </update>
 
+    <update id="updatePasswordById" parameterType="personalInformation">
+        update personal_information set userPassword=#{userPassword} where id=#{id}
+    </update>
+
+    <update id="updatePasswordByPhoneAndName" parameterType="personalInformation">
+        update personal_information set userPassword=#{userPassword} where userName=#{userName} and userPhone=#{userPhone}
+    </update>
     <delete id="deletePersonalInfoById" parameterType="int">
         delete from personal_information where id =#{id}
     </delete>

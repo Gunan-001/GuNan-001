@@ -29,11 +29,24 @@ public interface PersonInfoService {
     Result addPersonalInfo(PersonalInformation personalInformation);
 
     /**
-     * 更新用户信息
+     * 禁用或解除禁用用户
      * @param
      * @return
      */
     Result updatePersonalInfoById(List<PersonalInformation> personalInformation);
+
+    /**
+     * 修改用户密码
+     * @param
+     * @return
+     */
+    Result updatePasswordById(PersonalInformation personalInformation);
+    /**
+     * 修改用户密码通过phone和用户名
+     * @param
+     * @return
+     */
+    Result updatePasswordByPhoneAndName(PersonalInformation personalInformation);
 
     /**
      * 删除用户信息
