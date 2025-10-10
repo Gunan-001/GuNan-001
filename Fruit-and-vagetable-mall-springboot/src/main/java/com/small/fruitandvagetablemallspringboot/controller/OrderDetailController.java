@@ -110,45 +110,6 @@ public class OrderDetailController {
         }
 
         OrderDetail orders = service.queryForOrderDetailById(Long.valueOf(id));
-
-        /********************************************************/
-//        System.out.println(id);
-//        Result order = service.queryForOrderDetailInformationByOrderId(Integer.valueOf(id));
-//        Map<String, Object> data = order.getData();
-//
-//        // 获取orderList并取第一个元素（通常订单列表只有一个订单）
-//        List<Map<String, Object>> orderList = (List<Map<String, Object>>) data.get("orderList");
-//
-//        Map<String, Object> orderData = orderList.get(0);
-//
-//        // 创建实体类对象
-//        OrderDetail orders = new OrderDetail();
-//
-//        // 为实体类字段赋值（只映射实体类中存在的字段）
-//        if (orderData.containsKey("id")) {
-//            orders.setId(Integer.parseInt(orderData.get("id").toString()));
-//        }
-//        if (orderData.containsKey("addressId")) {
-//            orders.setAddressId(Integer.parseInt(orderData.get("addressId").toString()));
-//        }
-//        if (orderData.containsKey("userId")) {
-//            orders.setUserId(Integer.parseInt(orderData.get("userId").toString()));
-//        }
-//        if (orderData.containsKey("orderPay")) {
-//            orders.setOrderPay(orderData.get("orderPay").toString());
-//        }
-//        if (orderData.containsKey("commodityPrice")) {
-//            orders.setCommodityPrice(Double.parseDouble(orderData.get("commodityPrice").toString()));
-//        }
-//        if (orderData.containsKey("orderStatus")) {
-//            orders.setOrderStatus(Integer.parseInt(orderData.get("orderStatus").toString()));
-//        }
-//        if (orderData.containsKey("orderNumber")) {
-//            orders.setOrderNumber(orderData.get("orderNumber").toString());
-//        }
-
-/****************************************************************************/
-
         if (orders == null) {
             throw new Exception("订单不存在");
         }

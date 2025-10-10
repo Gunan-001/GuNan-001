@@ -36,11 +36,7 @@ public class CommoInfoServiceImpl implements CommoInfoService {
             search = "%" + search + "%";
         }
         Map<String, Object> resultMap = new HashMap<String, Object>();
-
-//        System.out.println("currentPage====>"+currentPage+
-//                "pageSize====>"+pageSize   );
         Integer start = (currentPage - 1) * pageSize;
-        //System.out.println("start====>"+start);
         List<Map<String, Object>> maps = commodityInfoMapper.queryForCommodityInfoAndClass(commodityClassId, search, start, pageSize);
         Integer totalPage = commodityInfoMapper.queryForCommodityCount(commodityClassId, search);
         resultMap.put("totalPage", totalPage);

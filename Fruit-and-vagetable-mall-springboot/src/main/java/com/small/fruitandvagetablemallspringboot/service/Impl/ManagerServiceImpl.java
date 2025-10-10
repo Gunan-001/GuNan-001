@@ -6,6 +6,7 @@ import com.small.fruitandvagetablemallspringboot.result.Result;
 import com.small.fruitandvagetablemallspringboot.result.ResultCodeEnum;
 import com.small.fruitandvagetablemallspringboot.service.JwtService;
 import com.small.fruitandvagetablemallspringboot.service.ManagerService;
+import com.small.fruitandvagetablemallspringboot.util.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,7 @@ public class ManagerServiceImpl implements ManagerService {
      */
     @Override
     public Result queryForManagerByManaUserAndPwd(Manager manager) {
+        manager.setPassword(MD5Utils.md5(manager.getPassword()));
         Manager res = managerMapper.queryForManagerByManaUserAndPwd(manager.getAccount(), manager.getPassword());
         if (null == res) {
                 //账户或密码错误,登录失败

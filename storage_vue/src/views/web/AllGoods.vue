@@ -10,7 +10,6 @@
                 <el-breadcrumb-item v-if="search">{{search}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <!-- 面包屑/ -->
         <!-- /分类标签 -->
         <div class="nav">
             <div class="product-nav">

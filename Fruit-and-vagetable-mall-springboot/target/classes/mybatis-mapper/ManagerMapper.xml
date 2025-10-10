@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.small.fruitandvagetablemallspringboot.dao.ManagerMapper">
+    <select id="queryForManagerById" parameterType="int"  resultType="manager">
+        select  * from  manager where  id=#{id};
+    </select>
+
+    <select id="queryForManagerByManaUserAndPwd" resultType="manager">
+        select * from manager where account=#{account} and password =#{password};
+    </select>
+
+    <select id="queryForManager"  resultType="manager">
+                select  * from  manager;
+    </select>
+
+    <insert id="addManagerInfo" parameterType="manager">
+        insert into manager(name,account,password) VALUES(#{name},#{account},#{password})
+    </insert>
+
+    <update id="updateManagerInfoById" parameterType="manager">
+        update manager
+        <set>
+            <if test="''!=name and null!=name">
+                name=#{name},
+            </if>
+            <if test="''!=account and null!=account">
+                account=#{account},
+            </if>
+            <if test="''!=password and null!=password">
+                password=#{password},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteManagerInfoById" parameterType="int">
+        delete from manager where id =#{id}
+    </delete>
+</mapper>
